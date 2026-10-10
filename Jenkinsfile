@@ -2,28 +2,22 @@ pipeline {
 agent any
 
 tools {
-    jdk 'JDK21'
-    maven 'Maven3'
+    jdk 'JDK 21'
+    maven 'Maven'
 }
 
 stages {
+
     stage('Checkout') {
         steps {
             checkout scm
         }
     }
 
-    stage('Build') {
+    stage('Build and Test') {
         steps {
-            bat 'mvn clean compile'
+            bat 'mvn clean test'
         }
-    }
-
-    stage('Test') {
-        steps {
-            bat 'mvn test'
-        }
-
         post {
             always {
                 junit 'target/surefire-reports/*.xml'
@@ -31,39 +25,24 @@ stages {
         }
     }
 
-    stage('Package') {
-        steps {
-            bat 'mvn package'
-        }
-    }
-
-    stage('Code Coverage') {
+    stage('Coverage') {
         steps {
             bat 'mvn jacoco:report'
         }
+    }
 
-        post {
-            always {
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'target/site/jacoco',
-                    reportFiles: 'index.html',
-                    reportName: 'JaCoCo Coverage Report'
-                ])
-            }
+    stage('Package') {
+        steps {
+            bat 'mvn package -DskipTests'
         }
     }
-}
 
-post {
-    success {
-        echo 'CI Pipeline completed successfully!'
-    }
-
-    failure {
-        echo 'CI Pipeline failed. Check the Console Output.'
+    stage('Static Analysis') {
+        steps {
+            withSonarQubeEnv('SonarQube') {
+                bat 'mvn sonar:sonar'
+            }
+        }
     }
 }
 
