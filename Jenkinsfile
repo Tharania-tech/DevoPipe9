@@ -1,39 +1,10 @@
 pipeline {
 agent any
 
-tools {
-    jdk 'JDK 21'
-    maven 'Maven'
-}
-
 stages {
-
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
-    }
-
     stage('Build and Test') {
         steps {
             bat 'mvn clean test'
-        }
-        post {
-            always {
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
-    }
-
-    stage('Coverage') {
-        steps {
-            bat 'mvn jacoco:report'
-        }
-    }
-
-    stage('Package') {
-        steps {
-            bat 'mvn package -DskipTests'
         }
     }
 
@@ -42,6 +13,20 @@ stages {
             withSonarQubeEnv('SonarQube') {
                 bat 'mvn sonar:sonar'
             }
+        }
+    }
+
+    stage('Quality Gate') {
+        steps {
+            timeout(time: 10, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+
+    stage('Package') {
+        steps {
+            bat 'mvn package -DskipTests'
         }
     }
 }
