@@ -36,7 +36,7 @@
     <build>
 
         <!-- Change 3: Test source directory -->
-        <testSourceDirectory>test</testSourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
 
         <plugins>
 
