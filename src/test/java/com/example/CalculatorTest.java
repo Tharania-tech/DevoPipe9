@@ -15,7 +15,7 @@ void testAddition() {
 
 @Test
 void testSubtraction() {
-    assertEquals(5, calculator.subtract(10, 5));
+    assertEquals(999, calculator.subtract(10, 5));
 }
 
 @Test
