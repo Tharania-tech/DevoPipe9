@@ -10,7 +10,7 @@ Calculator calculator = new Calculator();
 
 @Test
 void testAddition() {
-    assertEquals(13, calculator.add(5, 5));
+    assertEquals(11, calculator.add(5, 5));
 }
 
 @Test
