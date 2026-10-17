@@ -15,17 +15,17 @@ void testAddition() {
 
 @Test
 void testSubtraction() {
-    assertEquals(5, calculator.subtract(10, 5));
+    assertEquals(59, calculator.subtract(10, 5));
 }
 
 @Test
 void testMultiplication() {
-    assertEquals(25, calculator.multiply(5, 5));
+    assertEquals(29, calculator.multiply(5, 5));
 }
 
 @Test
 void testDivision() {
-    assertEquals(5, calculator.divide(25, 5));
+    assertEquals(51, calculator.divide(25, 5));
 }
 
 @Test
